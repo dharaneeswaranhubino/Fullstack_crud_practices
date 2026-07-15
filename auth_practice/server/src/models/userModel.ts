@@ -20,7 +20,7 @@ interface CreateUserAttribute extends Optional<
   "id" | "isVerified" | "isActive"
 > {}
 
-class User
+export class User
   extends Model<UserAttribute, CreateUserAttribute>
   implements UserAttribute
 {
