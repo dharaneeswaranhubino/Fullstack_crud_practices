@@ -24,7 +24,7 @@ module.exports = {
         unique: true,
       },
       password: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.STRING(255),
         allowNull: false,
       },
       phone: {
@@ -58,8 +58,8 @@ module.exports = {
       },
       updatedAt: {
         type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: false,
+        allowNull: true,
+        defaultValue: null,
       },
     });
   },
