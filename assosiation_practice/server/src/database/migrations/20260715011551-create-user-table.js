@@ -31,16 +31,6 @@ module.exports = {
         type: Sequelize.STRING(15),
         allowNull: false,
       },
-      roleId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "roles",
-          key: "id",
-        },
-        onDelete: "RESTRICT",
-        onUpdate: "CASCADE",
-      },
       isVerified: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
