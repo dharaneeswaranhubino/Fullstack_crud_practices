@@ -1,7 +1,7 @@
 export interface AuthTokenPayload {
     id: number;
     email: string;
-    roleId: number;
+    roles: string[];
 }
 
 export interface AuthTokens {
@@ -9,14 +9,16 @@ export interface AuthTokens {
     refreshToken: string;
 }
 
+export interface AuthUserResponse {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    roles: string[];
+}
+
 export interface AuthLoginResponse {
-    user: {
-        id: number;
-        firstName: string;
-        lastName: string;
-        email: string;
-        roleId: number;
-    };
+    user: AuthUserResponse;
     accessToken: string;
     refreshToken: string;
 }

@@ -11,7 +11,7 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      role: {
+      name: {
         type: Sequelize.STRING(50),
         allowNull: false,
         unique: true,

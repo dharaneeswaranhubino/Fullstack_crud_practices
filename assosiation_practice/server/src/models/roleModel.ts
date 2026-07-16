@@ -3,23 +3,25 @@ import { sequelize } from "../config/database";
 
 interface RoleAttribute {
   id: number;
-  role: string;
+  name: string;
   description: string | null;
   createdAt?: Date;
   updatedAt?: Date | null;
 }
 
-interface RoleCreationAttribute extends Optional<RoleAttribute, "id"> {}
+interface RoleCreationAttribute extends Optional<RoleAttribute, "id"> { }
 
 export class Role
   extends Model<RoleAttribute, RoleCreationAttribute>
-  implements RoleAttribute
-{
+  implements RoleAttribute {
   declare id: number;
-  declare role: string;
+  declare name: string;
   declare description: string | null;
-  declare readonly createdAt?: Date | undefined;
+  declare readonly createdAt?: Date;
   declare updatedAt?: Date | null | undefined;
+
+  declare Users?: any[];
+  declare Permissions?: any[];
 }
 
 Role.init(
@@ -30,9 +32,10 @@ Role.init(
       primaryKey: true,
       allowNull: false,
     },
-    role: {
+    name: {
       type: DataTypes.STRING(50),
       allowNull: false,
+      unique:true,
     },
     description: {
       type: DataTypes.STRING(255),

@@ -8,7 +8,6 @@ interface UserAttribute {
   email: string;
   password: string;
   phone: string;
-  roleId: number;
   isVerified: boolean;
   isActive: boolean;
   createdAt?: Date;
@@ -18,23 +17,23 @@ interface UserAttribute {
 interface CreateUserAttribute extends Optional<
   UserAttribute,
   "id" | "isVerified" | "isActive"
-> {}
+> { }
 
 export class User
   extends Model<UserAttribute, CreateUserAttribute>
-  implements UserAttribute
-{
+  implements UserAttribute {
   declare id: number;
   declare firstName: string;
   declare lastName: string;
   declare email: string;
   declare password: string;
   declare phone: string;
-  declare roleId: number;
   declare isVerified: boolean;
   declare isActive: boolean;
-  declare createdAt?: Date | undefined;
+  declare createdAt?: Date;
   declare updatedAt?: Date | null | undefined;
+
+  declare Roles?: any[];
 }
 
 User.init(
@@ -64,10 +63,6 @@ User.init(
     },
     phone: {
       type: DataTypes.STRING(15),
-      allowNull: false,
-    },
-    roleId: {
-      type: DataTypes.INTEGER,
       allowNull: false,
     },
     isVerified: {

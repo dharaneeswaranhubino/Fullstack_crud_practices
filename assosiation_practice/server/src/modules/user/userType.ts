@@ -4,5 +4,4 @@ export interface createUserAttribute {
     email: string;
     password: string;
     phone: string;
-    roleId: number;
 }

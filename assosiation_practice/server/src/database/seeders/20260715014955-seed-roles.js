@@ -5,13 +5,13 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert("roles", [
       {
-        role: "admin",
+        name: "admin",
         description: "Administrator with elevated privileges",
         createdAt: new Date(),
         updatedAt: null,
       },
       {
-        role: "user",
+        name: "user",
         description: "Default role assign for all registered user",
         createdAt: new Date(),
         updatedAt: null,
