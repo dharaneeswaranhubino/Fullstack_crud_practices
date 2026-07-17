@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom';
 import type { AppDispatch, RootState } from '../../../app/store/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,10 +12,10 @@ const LoginPage = () => {
         password: "",
     })
     const [fieldError, setError] = useState("");
-    const [isPassView, setIsPassView] = useState(false)
+    const [isPassView, setIsPassView] = useState(false);
 
     const dispatch = useDispatch<AppDispatch>();
-    const { error } = useSelector((state: RootState) => state.auth);
+    const { error, users } = useSelector((state: RootState) => state.auth);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { value, name } = e.target;
@@ -39,15 +39,36 @@ const LoginPage = () => {
         // console.log("result :", result);
 
         if (loginUser.fulfilled.match(result)) {
-            navigate("/dashboard")
             alert("login successfully!!!")
             setUser({
                 email: "",
                 password: ""
             })
         }
-
     }
+
+    useEffect(() => {
+        if (users) {
+            // console.log("users:", users.roles);
+            users.roles.map((item) => {
+
+                if (item === "user") {
+                    navigate("/userdashboard");
+                } else if (item === "admin") {
+                    navigate("/admindashboard")
+                }
+                // return item;
+            })
+            // console.log(role);
+            // if (role === "user") {
+
+            //     navigate("/userdashboard");
+            // } else if (role === "admin") {
+            //     navigate("/adminDashboard")
+            // }
+
+        }
+    }, [users]);
     return (
         <>
             <div className='my-4'>

@@ -4,10 +4,12 @@ export interface UserType {
     email: string;
     password: string;
     phone: string;
+    roles: string[];
 }
 
 export interface AuthType {
-    user:UserType | null;
-    loading:boolean
-    error:string | null;
+    users: UserType | null;
+    accessToken:string | null;
+    loading: boolean
+    error: string | null;
 }
