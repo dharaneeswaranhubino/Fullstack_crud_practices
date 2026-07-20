@@ -2,7 +2,7 @@ import { includes } from "zod";
 import { Role } from "../../models/roleModel";
 import { User } from "../../models/userModel";
 import { createUserAttribute } from "./userType";
-import { Model } from "sequelize";
+import { Model, Transaction } from "sequelize";
 import { UserRole } from "../../models/userRoleModel";
 
 export class UserRepository {
@@ -39,11 +39,11 @@ export class UserRepository {
         });
     }
 
-    async create(data: createUserAttribute): Promise<User> {
-        return User.create(data);
+    async create(data: createUserAttribute, t?:Transaction): Promise<User> {
+        return User.create(data,{transaction:t});
     }
 
-    async assignRole(userId: number, roleId: number): Promise<void> {
-        await UserRole.create({ userId, roleId });
+    async assignRole(userId: number, roleId: number, t?:Transaction): Promise<void> {
+        await UserRole.create({ userId, roleId },{transaction:t});
     }
 }

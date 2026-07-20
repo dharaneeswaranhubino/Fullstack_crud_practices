@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import { env } from "../../config/env";
 import { redisClient } from "../../config/redis";
 import { RoleRepository } from "../role/roleRepository";
+import { sequelize } from "../../config/database";
 
 export class AuthService {
     // private userRepository: UserRepository;
@@ -34,32 +35,46 @@ export class AuthService {
         if (existing) {
             throw new ApiError("Email already registered", 409);
         }
-        const hashedPassword = await bcrypt.hash(data.password, 10);
-
-        const user = await this.userRepository.create({
-            ...data,
-            password: hashedPassword,
-        });
 
         const userRole = await this.roleRepository.findByName("user");
         if (!userRole) {
             throw new ApiError("Default role not found", 500)
         }
 
-        await this.userRepository.assignRole(user.id, userRole.id);
+        const t = await sequelize.transaction();
 
-        const { password, ...safeUser } = user.toJSON();
-        // return safeUser;
-        return {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            phone: user.phone,
-            isVerified: user.isVerified,
-            isActive: user.isActive,
-            createdAt: user.createdAt,
+        try {
+
+            const hashedPassword = await bcrypt.hash(data.password, 10);
+
+            const user = await this.userRepository.create({
+                ...data,
+                password: hashedPassword,
+            }, t);
+
+            await this.userRepository.assignRole(user.id, userRole.id, t);
+
+            // throw new Error("FORCED ERROR - testing rollback!"); for testing purpose
+            await t.commit();
+
+            const { password, ...safeUser } = user.toJSON();
+            // return safeUser;
+            return {
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phone: user.phone,
+                isVerified: user.isVerified,
+                isActive: user.isActive,
+                createdAt: user.createdAt,
+            }
+        } catch (err) {
+            t.rollback();
+            throw err;
+
         }
+
     }
 
     async login(data: LoginInput): Promise<AuthLoginResponse> {
